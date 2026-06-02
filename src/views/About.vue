@@ -147,8 +147,17 @@
 </template>
 
 <script>
+// 1. 在顶部引入图片
+import honor1 from '@/assets/honor1.png'
+import honor2 from '@/assets/honor2.png'
+import honor3 from '@/assets/honor3.png'
+import honor4 from '@/assets/honor4.png'
+
+import team1 from '@/assets/team1.jpg'
+import team2 from '@/assets/team2.jpg'
+import team3 from '@/assets/team3.jpg'
+import team4 from '@/assets/team4.jpg'
 export default {
-  // eslint-disable-next-line vue/multi-word-component-names
   name: 'About',
   data() {
     return {
@@ -161,36 +170,16 @@ export default {
         { year: '2025', title: '新起点', desc: '启动新一轮战略升级，打造智慧认证生态' }
       ],
       honors: [
-        { title: 'CNAS认可证书', image: '@/assets/honor1.png' },
-        { title: 'CMA资质证书', image: '@/assets/honor2.png' },
-        { title: '行业协会会员证', image: '@/assets/honor3.png' },
-        { title: 'AAA信用企业', image: '@/assets/honor4.png' }
+        { title: 'CNAS认可证书', image: honor1 },
+        { title: 'CMA资质证书', image: honor2 },
+        { title: '行业协会会员证', image: honor3 },
+        { title: 'AAA信用企业', image: honor4 }
       ],
       team: [
-        {
-          name: '张总经理',
-          position: '总经理',
-          photo: '@/assets/team1.jpg',
-          desc: '15年认证行业经验，曾任多家知名认证机构高管'
-        },
-        {
-          name: '李技术总监',
-          position: '技术总监',
-          photo: '@/assets/team2.jpg',
-          desc: '高级工程师，ISO审核员资格，精通各类管理体系标准'
-        },
-        {
-          name: '王首席审核员',
-          position: '首席审核员',
-          photo: '@/assets/team3.jpg',
-          desc: '20年质量管理经验，累计审核企业超过300家'
-        },
-        {
-          name: '赵市场总监',
-          position: '市场总监',
-          photo: '@/assets/team4.jpg',
-          desc: '10年市场营销经验，擅长企业咨询服务'
-        }
+        { name: '张总经理', position: '总经理', photo: team1, desc: '15年认证行业经验，曾任多家知名认证机构高管' },
+        { name: '李技术总监', position: '技术总监', photo: team2, desc: '高级工程师，ISO审核员资格，精通各类管理体系标准' },
+        { name: '王首席审核员', position: '首席审核员', photo: team3, desc: '20年质量管理经验，累计审核企业超过300家' },
+        { name: '赵市场总监', position: '市场总监', photo: team4, desc: '10年市场营销经验，擅长企业咨询服务' }
       ]
     }
   },

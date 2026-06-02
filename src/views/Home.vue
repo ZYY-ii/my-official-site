@@ -7,7 +7,7 @@
       </div>
       <div class="container hero-content">
         <div class="hero-text">
-          <h1 class="hero-title">权威认证 · 赋能企业高质量发展</h1>
+          <h1 class="hero-title">权威认证 · 赋能企业高质量发展 </h1>
           <p class="hero-subtitle">一站式管理体系认证解决方案提供商</p>
           <div class="hero-buttons">
             <el-button type="primary" size="large" @click="$router.push('/service')">
@@ -72,7 +72,7 @@
         <div class="news-grid">
           <div class="news-card" v-for="news in latestNews" :key="news.id" @click="goToNews(news)">
             <div class="news-image">
-              <img :src="news.cover || '@/assets/news-default.jpg'" :alt="news.title" />
+              <img src="@/assets/news-default.jpg" :alt="news.title" />
               <span class="news-tag" :class="news.category">{{ news.categoryName }}</span>
             </div>
             <div class="news-content">
@@ -153,7 +153,7 @@ export default {
           categoryName: '政策法规',
           publishTime: '2025-10-24',
           summary: '质量管理体系认证规则更新，新增对气候变化考虑的要求...',
-          cover: ''
+          cover: '@/assets/news-default.jpg'
         },
         {
           id: 2,
