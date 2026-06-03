@@ -4,195 +4,273 @@
     <section class="page-banner">
       <div class="banner-bg">
         <div class="banner-pattern"></div>
+        <div class="banner-shapes">
+          <div class="shape shape-1"></div>
+          <div class="shape shape-2"></div>
+          <div class="shape shape-3"></div>
+        </div>
       </div>
-      <div class="container">
+      <div class="container banner-content">
         <h1>证书真伪查询中心</h1>
-        <p class="banner-desc">一键验证，权威可信 · 保障您的合法权益</p>
+        <p class="banner-desc">一键验证 · 权威可信 · 保障您的合法权益</p>
+        <div class="banner-features">
+          <span><i class="el-icon-check"></i> 官方数据库</span>
+          <span><i class="el-icon-check"></i> 实时查询</span>
+          <span><i class="el-icon-check"></i> 权威认证</span>
+        </div>
       </div>
     </section>
 
     <!-- 查询区域 -->
     <section class="query-section">
       <div class="container">
-        <div class="query-card">
+        <div class="query-wrapper">
           <!-- Tab切换 -->
-          <el-tabs v-model="activeTab" class="query-tabs">
-            <el-tab-pane label="按证书编号查询" name="certNo">
-              <div class="query-form">
-                <el-form :model="queryForm" :rules="queryRules" ref="queryFormRef" label-position="top">
-                  <el-form-item label="证书编号" prop="certNo">
-                    <el-input 
-                      v-model="queryForm.certNo" 
-                      placeholder="请输入12位数字证书编号"
-                      maxlength="12"
-                      show-word-limit
-                      prefix-icon="el-icon-ticket"
-                    >
-                      <template slot="append">
-                        <el-tooltip content="证书编号格式：12位纯数字" placement="top">
-                          <i class="el-icon-question"></i>
-                        </el-tooltip>
-                      </template>
-                    </el-input>
-                  </el-form-item>
-                  <el-form-item label="验证码" prop="captcha">
-                    <div class="captcha-group">
-                      <el-input 
-                        v-model="queryForm.captcha" 
-                        placeholder="请输入验证码"
-                        style="width: 200px"
-                      ></el-input>
-                      <div class="captcha-image" @click="refreshCaptcha">
-                        <img :src="captchaImg" alt="验证码" />
-                        <span class="captcha-refresh">换一张</span>
-                      </div>
-                    </div>
-                  </el-form-item>
-                  <el-form-item>
-                    <el-button 
-                      type="primary" 
-                      size="large" 
-                      @click="handleQuery"
-                      :loading="queryLoading"
-                    >
-                      <i class="el-icon-search"></i> 立即查询
-                    </el-button>
-                  </el-form-item>
-                </el-form>
-              </div>
-            </el-tab-pane>
-            
-            <el-tab-pane label="按企业名称查询" name="orgName">
-              <div class="query-form">
-                <el-form :model="queryForm" :rules="queryRules" ref="queryFormRef" label-position="top">
-                  <el-form-item label="企业全称" prop="orgName">
-                    <el-input 
-                      v-model="queryForm.orgName" 
-                      placeholder="请输入企业营业执照上的完整名称"
-                      prefix-icon="el-icon-office-building"
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item label="验证码" prop="captcha">
-                    <div class="captcha-group">
-                      <el-input 
-                        v-model="queryForm.captcha" 
-                        placeholder="请输入验证码"
-                        style="width: 200px"
-                      ></el-input>
-                      <div class="captcha-image" @click="refreshCaptcha">
-                        <img :src="captchaImg" alt="验证码" />
-                        <span class="captcha-refresh">换一张</span>
-                      </div>
-                    </div>
-                  </el-form-item>
-                  <el-form-item>
-                    <el-button 
-                      type="primary" 
-                      size="large" 
-                      @click="handleQuery"
-                      :loading="queryLoading"
-                    >
-                      <i class="el-icon-search"></i> 立即查询
-                    </el-button>
-                  </el-form-item>
-                </el-form>
-              </div>
-            </el-tab-pane>
-          </el-tabs>
+          <div class="query-tabs-custom">
+            <div 
+              class="tab-item" 
+              :class="{ active: activeTab === 'certNo' }"
+              @click="activeTab = 'certNo'"
+            >
+              <i class="el-icon-ticket"></i>
+              <span>证书编号查询</span>
+            </div>
+            <div 
+              class="tab-item" 
+              :class="{ active: activeTab === 'orgName' }"
+              @click="activeTab = 'orgName'"
+            >
+              <i class="el-icon-office-building"></i>
+              <span>企业名称查询</span>
+            </div>
+            <div class="tab-active-bar" :style="tabBarStyle"></div>
+          </div>
+
+          <div class="query-card">
+            <div class="query-form">
+              <el-form 
+                v-if="activeTab === 'certNo'" 
+                :model="queryForm" 
+                :rules="queryRules" 
+                ref="queryFormRef"
+              >
+                <div class="form-group">
+                  <label class="form-label">
+                    <i class="el-icon-ticket"></i>
+                    证书编号
+                  </label>
+                  <el-input 
+                    v-model="queryForm.certNo" 
+                    placeholder="请输入12位数字证书编号"
+                    maxlength="12"
+                    class="custom-input"
+                  >
+                    <template slot="append">
+                      <el-tooltip content="证书编号位于证书右上角" placement="top">
+                        <i class="el-icon-question"></i>
+                      </el-tooltip>
+                    </template>
+                  </el-input>
+                  <div class="input-hint">示例：123456789012</div>
+                </div>
+
+                <el-button 
+                  type="primary" 
+                  size="large" 
+                  @click="handleQuery"
+                  :loading="queryLoading"
+                  class="query-btn"
+                >
+                  <i class="el-icon-search"></i>
+                  <span>立即查询</span>
+                </el-button>
+              </el-form>
+
+              <el-form 
+                v-else 
+                :model="queryForm" 
+                :rules="queryRules" 
+                ref="queryFormRef"
+              >
+                <div class="form-group">
+                  <label class="form-label">
+                    <i class="el-icon-office-building"></i>
+                    企业全称
+                  </label>
+                  <el-input 
+                    v-model="queryForm.orgName" 
+                    placeholder="请输入企业营业执照上的完整名称"
+                    class="custom-input"
+                  ></el-input>
+                  <div class="input-hint">请输入完整的公司名称</div>
+                </div>
+
+                <el-button 
+                  type="primary" 
+                  size="large" 
+                  @click="handleQuery"
+                  :loading="queryLoading"
+                  class="query-btn"
+                >
+                  <i class="el-icon-search"></i>
+                  <span>立即查询</span>
+                </el-button>
+              </el-form>
+            </div>
+          </div>
+
+          <!-- 快捷提示 -->
+          <div class="query-tips">
+            <div class="tip-item">
+              <i class="el-icon-info"></i>
+              <span>查询结果具有法律效力</span>
+            </div>
+            <div class="tip-item">
+              <i class="el-icon-time"></i>
+              <span>7×24小时在线查询</span>
+            </div>
+            <div class="tip-item">
+              <i class="el-icon-lock"></i>
+              <span>数据安全加密保护</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- 查询结果 -->
-    <section class="result-section" v-if="queryResult">
+    <section class="result-section" v-if="queryResult || resultStatus === 'failure'">
       <div class="container">
         <div class="result-card" :class="resultStatus">
           <!-- 成功状态 -->
           <div v-if="resultStatus === 'success'" class="result-success">
-            <div class="success-header">
-              <i class="el-icon-circle-check"></i>
-              <h3>✅ 证书有效</h3>
+            <div class="result-header">
+              <div class="status-badge success">
+                <i class="el-icon-circle-check"></i>
+                <span>证书有效</span>
+              </div>
+              <!-- <div class="cert-qr">
+                <img src="@/assets/qr-placeholder.png" alt="二维码" />
+                <span>扫码验证</span>
+              </div> -->
             </div>
-            <div class="result-content">
-              <div class="cert-preview">
-                <img src="@/assets/cert-sample.jpg" alt="证书预览" />
-                <div class="preview-mask">
-                  <el-button type="primary" size="small" @click="downloadCert">
-                    <i class="el-icon-download"></i> 下载电子证书
-                  </el-button>
+
+            <div class="result-body">
+              <div class="cert-info-grid">
+                <div class="info-item">
+                  <div class="info-label">证书编号</div>
+                  <div class="info-value">{{ queryResult.certNo }}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">获证组织</div>
+                  <div class="info-value">{{ queryResult.orgName }}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">认证标准</div>
+                  <div class="info-value">
+                    <el-tag size="small" type="primary">{{ queryResult.standardCode }}</el-tag>
+                  </div>
+                </div>
+                <div class="info-item full-width">
+                  <div class="info-label">认证范围</div>
+                  <div class="info-value">{{ queryResult.scope }}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">发证日期</div>
+                  <div class="info-value">{{ queryResult.issueDate }}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">有效期至</div>
+                  <div class="info-value">
+                    {{ queryResult.expireDate }}
+                    <el-tag 
+                      v-if="isExpired(queryResult.expireDate)" 
+                      size="mini" 
+                      type="danger"
+                      class="status-tag"
+                    >
+                      已过期
+                    </el-tag>
+                    <el-tag 
+                      v-else-if="isExpiringSoon(queryResult.expireDate)" 
+                      size="mini" 
+                      type="warning"
+                      class="status-tag"
+                    >
+                      即将到期
+                    </el-tag>
+                    <el-tag 
+                      v-else
+                      size="mini" 
+                      type="success"
+                      class="status-tag"
+                    >
+                      有效
+                    </el-tag>
+                  </div>
                 </div>
               </div>
-              <el-descriptions 
-                :column="1" 
-                border 
-                class="cert-details"
-              >
-                <el-descriptions-item label="证书编号">
-                  {{ queryResult.certNo }}
-                </el-descriptions-item>
-                <el-descriptions-item label="获证组织">
-                  {{ queryResult.orgName }}
-                </el-descriptions-item>
-                <el-descriptions-item label="认证标准">
-                  {{ queryResult.standardCode }}
-                </el-descriptions-item>
-                <el-descriptions-item label="认证范围">
-                  {{ queryResult.scope }}
-                </el-descriptions-item>
-                <el-descriptions-item label="发证日期">
-                  {{ queryResult.issueDate }}
-                </el-descriptions-item>
-                <el-descriptions-item label="有效期至">
-                  {{ queryResult.expireDate }}
-                  <el-tag 
-                    v-if="isExpired(queryResult.expireDate)" 
-                    size="mini" 
-                    type="danger"
-                    style="margin-left: 10px"
-                  >
-                    已过期
-                  </el-tag>
-                  <el-tag 
-                    v-else-if="isExpiringSoon(queryResult.expireDate)" 
-                    size="mini" 
-                    type="warning"
-                    style="margin-left: 10px"
-                  >
-                    即将到期
-                  </el-tag>
-                </el-descriptions-item>
-                <el-descriptions-item label="证书状态">
-                  <el-tag :type="getStatusTagType(queryResult.status)">
-                    {{ queryResult.status }}
-                  </el-tag>
-                </el-descriptions-item>
-              </el-descriptions>
             </div>
-            <div class="result-actions">
-              <el-button @click="shareResult">
-                <i class="el-icon-share"></i> 分享结果
+
+            <div class="result-footer">
+              <el-button @click="printCert" class="action-btn">
+                <i class="el-icon-printer"></i> 打印证书
               </el-button>
-              <el-button type="primary" @click="contactVerify">
-                <i class="el-icon-phone"></i> 人工核实
+              <el-button type="primary" @click="downloadCert" class="action-btn primary">
+                <i class="el-icon-download"></i> 下载电子证书
+              </el-button>
+              <el-button @click="shareResult" class="action-btn">
+                <i class="el-icon-share"></i> 分享
               </el-button>
             </div>
           </div>
 
           <!-- 失败状态 -->
           <div v-else class="result-failure">
-            <i class="el-icon-warning-outline"></i>
+            <div class="failure-icon">
+              <i class="el-icon-warning-outline"></i>
+            </div>
             <h3>未找到相关证书</h3>
             <p class="failure-desc">
-              请检查证书编号或企业名称是否正确，或联系人工客服协助查询
+              请检查输入的证书编号或企业名称是否正确<br>
+              或联系人工客服协助查询
             </p>
             <div class="failure-actions">
-              <el-button @click="queryResult = null">
+              <el-button @click="queryResult = null; resultStatus = ''" class="action-btn">
                 <i class="el-icon-refresh"></i> 重新查询
               </el-button>
-              <el-button type="primary" @click="contactSupport">
-                <i class="el-icon-customer-service"></i> 人工协助
+              <el-button type="primary" @click="contactSupport" class="action-btn primary">
+                <i class="el-icon-customer-service"></i> 联系客服
               </el-button>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 权威说明 -->
+    <section class="authority-section">
+      <div class="container">
+        <div class="authority-card">
+          <div class="authority-header">
+            <div class="header-icon">
+              <i class="el-icon-s-flag"></i>
+            </div>
+            <h3>查询说明</h3>
+          </div>
+          <p class="authority-text">
+            本查询系统数据来源于中标信认证官方数据库，查询结果具有法律效力。
+            如发现证书信息有误，请及时联系我司核实更正。
+          </p>
+          <div class="authority-links">
+            <a href="https://www.cnca.cn" target="_blank" class="link-item">
+              <i class="el-icon-link"></i> 
+              <span>国家认证认可监督管理委员会</span>
+            </a>
+            <a href="https://www.cnas.org.cn" target="_blank" class="link-item">
+              <i class="el-icon-link"></i> 
+              <span>中国合格评定国家认可委员会</span>
+            </a>
           </div>
         </div>
       </div>
@@ -201,37 +279,26 @@
     <!-- 常见问题 -->
     <section class="faq-section">
       <div class="container">
-        <h2 class="section-title">常见问题</h2>
-        <el-collapse v-model="activeFaqs" accordion class="faq-list">
-          <el-collapse-item 
+        <div class="section-header">
+          <h2 class="section-title">常见问题</h2>
+          <p class="section-subtitle">快速解答您的疑问</p>
+        </div>
+        <div class="faq-list">
+          <div 
             v-for="(faq, index) in faqs" 
             :key="index"
-            :title="faq.question"
-            :name="index"
+            class="faq-item"
+            :class="{ active: activeFaqs === index }"
+            @click="activeFaqs = activeFaqs === index ? -1 : index"
           >
-            <p>{{ faq.answer }}</p>
-          </el-collapse-item>
-        </el-collapse>
-      </div>
-    </section>
-
-    <!-- 权威说明 -->
-    <section class="authority-section">
-      <div class="container">
-        <div class="authority-card">
-          <i class="el-icon-s-flag"></i>
-          <h3>查询说明</h3>
-          <p>
-            本查询系统数据来源于中标信认证官方数据库，查询结果具有法律效力。
-            如发现证书信息有误，请及时联系我司核实更正。
-          </p>
-          <div class="authority-links">
-            <a href="https://www.cnca.cn" target="_blank">
-              <i class="el-icon-link"></i> 国家认证认可监督管理委员会
-            </a>
-            <a href="https://www.cnas.org.cn" target="_blank">
-              <i class="el-icon-link"></i> 中国合格评定国家认可委员会
-            </a>
+            <div class="faq-question">
+              <span class="faq-number">{{ index + 1 }}</span>
+              <span class="faq-text">{{ faq.question }}</span>
+              <i class="el-icon-arrow-right faq-icon"></i>
+            </div>
+            <div class="faq-answer" v-show="activeFaqs === index">
+              <p>{{ faq.answer }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -271,21 +338,18 @@ export default {
 
     return {
       activeTab: 'certNo',
-      activeFaqs: 0,
+      activeFaqs: -1,
       queryLoading: false,
-      captchaImg: '/api/captcha?' + Date.now(),
       queryForm: {
         certNo: '',
-        orgName: '',
-        captcha: ''
+        orgName: ''
       },
       queryRules: {
         certNo: [{ validator: validateCertNo, trigger: 'blur' }],
-        orgName: [{ validator: validateOrgName, trigger: 'blur' }],
-        captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
+        orgName: [{ validator: validateOrgName, trigger: 'blur' }]
       },
       queryResult: null,
-      resultStatus: '', // 'success' or 'failure'
+      resultStatus: '',
       faqs: [
         {
           question: '如何获取证书编号？',
@@ -310,20 +374,21 @@ export default {
       ]
     }
   },
+  computed: {
+    tabBarStyle() {
+    return this.activeTab === 'certNo' 
+      ? { left: '10%' }
+      : { left: '60%' }
+  }
+  },
   methods: {
-    refreshCaptcha() {
-      this.captchaImg = '/api/captcha?' + Date.now()
-      this.queryForm.captcha = ''
-    },
     async handleQuery() {
       try {
         await this.$refs.queryFormRef.validate()
         this.queryLoading = true
         
-        // 模拟API调用
         await new Promise(resolve => setTimeout(resolve, 1500))
         
-        // Mock 查询结果（实际项目调用后端接口）
         if (this.activeTab === 'certNo' && this.queryForm.certNo === '123456789012') {
           this.queryResult = {
             certNo: '123456789012',
@@ -337,22 +402,17 @@ export default {
           this.resultStatus = 'success'
           this.$message.success('查询成功')
         } else {
-          this.queryResult = null
           this.resultStatus = 'failure'
           this.$message.warning('未找到相关证书')
         }
         
-        // 滚动到结果区域
-        if (this.queryResult || this.resultStatus === 'failure') {
-          this.$nextTick(() => {
-            document.querySelector('.result-section')?.scrollIntoView({ behavior: 'smooth' })
-          })
-        }
+        this.$nextTick(() => {
+          document.querySelector('.result-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        })
       } catch (error) {
         this.$message.error(error.message || '查询失败，请重试')
       } finally {
         this.queryLoading = false
-        this.refreshCaptcha()
       }
     },
     isExpired(expireDate) {
@@ -364,24 +424,14 @@ export default {
       const diffDays = Math.ceil((expire - now) / (1000 * 60 * 60 * 24))
       return diffDays > 0 && diffDays <= days
     },
-    getStatusTagType(status) {
-      const map = {
-        '有效': 'success',
-        '暂停': 'warning',
-        '撤销': 'danger',
-        '过期': 'info'
-      }
-      return map[status] || 'info'
-    },
     downloadCert() {
       this.$message.success('开始下载电子证书...')
-      // window.open(`/api/cert/${this.queryResult.certNo}/download`)
+    },
+    printCert() {
+      this.$message.info('打印功能开发中')
     },
     shareResult() {
       this.$message.info('分享功能开发中')
-    },
-    contactVerify() {
-      this.$router.push('/contact?certVerify=true')
     },
     contactSupport() {
       this.$router.push('/contact')
@@ -391,26 +441,28 @@ export default {
     activeTab() {
       this.queryForm.certNo = ''
       this.queryForm.orgName = ''
-      this.queryForm.captcha = ''
       this.queryResult = null
+      this.resultStatus = ''
     }
-  },
-  mounted() {
-    this.refreshCaptcha()
   }
 }
 </script>
 
 <style scoped lang="scss">
+.cert-query-page {
+  background: #f5f7fa;
+  min-height: 100vh;
+}
+
+/* Banner Section */
 .page-banner {
   position: relative;
-  min-height: 280px;
+  min-height: 600px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #0A2E6D 0%, #1a4a8d 100%);
+  background: var(--primary-blue);
   color: #fff;
-  text-align: center;
   overflow: hidden;
 
   .banner-bg {
@@ -419,203 +471,397 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
+    background: url('@/assets/cert-banner.jpg') center/cover;
+    opacity: 0.2;
 
     .banner-pattern {
       width: 100%;
       height: 100%;
       background-image: 
-        radial-gradient(circle at 20% 80%, rgba(74,144,226,0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(212,175,55,0.1) 0%, transparent 50%),
-        linear-gradient(45deg, transparent 49%, rgba(255,255,255,0.03) 50%, transparent 51%);
-      background-size: 100% 100%, 100% 100%, 20px 20px;
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
+    }
+
+    .banner-shapes {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      
+      .shape {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.03);
+        
+        &.shape-1 {
+          width: 300px;
+          height: 300px;
+          top: -100px;
+          right: -100px;
+        }
+        
+        &.shape-2 {
+          width: 200px;
+          height: 200px;
+          bottom: -50px;
+          left: 10%;
+        }
+        
+        &.shape-3 {
+          width: 150px;
+          height: 150px;
+          top: 40%;
+          right: 20%;
+        }
+      }
     }
   }
 
-  .container {
+  .banner-content {
     position: relative;
     z-index: 1;
-    padding: 40px 20px;
+    padding: 60px 20px;
   }
 
   h1 {
     font-size: 42px;
     font-weight: 700;
     margin-bottom: 15px;
+    letter-spacing: -0.5px;
   }
 
   .banner-desc {
     font-size: 18px;
     opacity: 0.9;
-  }
-}
-
-.query-section {
-  padding: 50px 0 30px;
-
-  .query-card {
-    max-width: 700px;
-    margin: 0 auto;
-    background: #fff;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-card);
-    padding: 40px;
+    margin-bottom: 30px;
+    font-weight: 300;
   }
 
-  .query-tabs {
-    :deep(.el-tabs__nav) {
-      margin: 0 auto 30px;
-    }
-
-    :deep(.el-tabs__item) {
-      font-size: 16px;
-      font-weight: 500;
-      padding: 0 30px;
-    }
-  }
-
-  .query-form {
-    .el-form-item {
-      margin-bottom: 25px;
-
-      :deep(.el-form-item__label) {
-        font-weight: 500;
-        font-size: 15px;
-      }
-    }
-
-    .captcha-group {
+  .banner-features {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    
+    span {
       display: flex;
       align-items: center;
-      gap: 15px;
-
-      .captcha-image {
-        position: relative;
-        cursor: pointer;
-
-        img {
-          height: 40px;
-          border: 1px solid #dcdfe6;
-          border-radius: 4px;
-        }
-
-        .captcha-refresh {
-          position: absolute;
-          bottom: -20px;
-          left: 50%;
-          transform: translateX(-50%);
-          font-size: 12px;
-          color: var(--secondary-blue);
-          white-space: nowrap;
-        }
-
-        &:hover .captcha-refresh {
-          color: var(--primary-blue);
-          text-decoration: underline;
-        }
+      gap: 8px;
+      font-size: 14px;
+      opacity: 0.9;
+      
+      i {
+        color: #4ade80;
       }
-    }
-
-    .el-button {
-      width: 100%;
-      padding: 15px;
-      font-size: 16px;
     }
   }
 }
 
+/* Query Section */
+.query-section {
+  padding: 60px 0 40px;
+  position: relative;
+  z-index: 2;
+
+  .query-wrapper {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .query-tabs-custom {
+    position: relative;
+    display: flex;
+    background: #fff;
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+    overflow: hidden;
+    margin-bottom: 0;
+
+    .tab-item {
+      flex: 1;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      color: #64748b;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+
+      i {
+        font-size: 20px;
+      }
+
+      &.active {
+        color: #0A2E6D;
+        font-weight: 600;
+      }
+
+      &:hover {
+        color: #0A2E6D;
+      }
+    }
+
+    .tab-active-bar {
+      position: absolute;
+      bottom: 0;
+      width: 30%;
+      height: 3px;
+      background: linear-gradient(90deg, #0A2E6D, #2563eb);
+      transition: all 0.3s;
+    }
+  }
+
+  .query-card {
+    background: #fff;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    padding: 40px;
+
+    .query-form {
+      .form-group {
+        margin-bottom: 30px;
+
+        .form-label {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 15px;
+          font-weight: 600;
+          color: #1e293b;
+          margin-bottom: 12px;
+
+          i {
+            color: #2563eb;
+          }
+        }
+
+        .custom-input {
+          :deep(.el-input__inner) {
+            height: 50px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+
+            &:focus {
+              border-color: #2563eb;
+              box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            }
+          }
+
+          :deep(.el-input-group__append) {
+            background: #f1f5f9;
+            border: 2px solid #e2e8f0;
+            border-left: none;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+
+            i {
+              color: #64748b;
+            }
+
+            &:hover {
+              background: #e2e8f0;
+            }
+          }
+        }
+
+        .input-hint {
+          margin-top: 8px;
+          font-size: 13px;
+          color: #94a3b8;
+        }
+      }
+
+      .query-btn {
+        width: 100%;
+        height: 54px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #0A2E6D 0%, #2563eb 100%);
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: all 0.3s;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+      }
+    }
+  }
+
+  .query-tips {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+
+    .tip-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #64748b;
+
+      i {
+        color: #2563eb;
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+/* Result Section */
 .result-section {
-  padding: 30px 0 60px;
+  padding: 40px 0 60px;
 
   .result-card {
     max-width: 900px;
     margin: 0 auto;
     background: #fff;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-card);
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
     overflow: hidden;
+    animation: slideUp 0.5s ease;
 
     &.success {
-      border-top: 4px solid #67c23a;
+      border-top: 4px solid #10b981;
     }
 
     &.failure {
-      border-top: 4px solid #f56c6c;
+      border-top: 4px solid #f59e0b;
     }
   }
 
   .result-success {
-    padding: 40px;
-
-    .success-header {
+    .result-header {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 15px;
-      margin-bottom: 30px;
-      padding-bottom: 25px;
-      border-bottom: 2px solid var(--bg-light);
+      padding: 30px 40px;
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      border-bottom: 1px solid #bbf7d0;
 
-      i {
-        font-size: 48px;
-        color: #67c23a;
+      .status-badge {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        background: #10b981;
+        color: #fff;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 16px;
+
+        i {
+          font-size: 24px;
+        }
       }
 
-      h3 {
-        font-size: 24px;
-        color: var(--text-main);
-        margin: 0;
+      .cert-qr {
+        text-align: center;
+        
+        img {
+          width: 80px;
+          height: 80px;
+          border-radius: 8px;
+          border: 2px solid #fff;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        span {
+          display: block;
+          margin-top: 8px;
+          font-size: 12px;
+          color: #64748b;
+        }
       }
     }
 
-    .result-content {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 40px;
-      margin-bottom: 40px;
+    .result-body {
+      padding: 40px;
 
-      .cert-preview {
-        position: relative;
-        border: 2px dashed #dcdfe6;
-        border-radius: 8px;
-        overflow: hidden;
+      .cert-info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
 
-        img {
-          width: 100%;
-          display: block;
-        }
+        .info-item {
+          &.full-width {
+            grid-column: 1 / -1;
+          }
 
-        .preview-mask {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(0,0,0,0.4);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          opacity: 0;
-          transition: opacity 0.3s;
+          .info-label {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 8px;
+            font-weight: 500;
+          }
 
-          &:hover {
-            opacity: 1;
+          .info-value {
+            font-size: 16px;
+            color: #1e293b;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            .status-tag {
+              margin-left: 10px;
+            }
           }
         }
       }
-
-      .cert-details {
-        :deep(.el-descriptions__label) {
-          width: 120px;
-          font-weight: 500;
-        }
-      }
     }
 
-    .result-actions {
+    .result-footer {
       display: flex;
       justify-content: center;
-      gap: 20px;
-      padding-top: 30px;
-      border-top: 2px solid var(--bg-light);
+      gap: 15px;
+      padding: 30px 40px;
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+
+      .action-btn {
+        min-width: 140px;
+        height: 44px;
+        font-weight: 500;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all 0.3s;
+
+        &.primary {
+          background: linear-gradient(135deg, #0A2E6D 0%, #2563eb 100%);
+          border: none;
+          color: #fff;
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+          }
+        }
+
+        &:hover {
+          background: #f1f5f9;
+        }
+      }
     }
   }
 
@@ -623,144 +869,321 @@ export default {
     padding: 60px 40px;
     text-align: center;
 
-    i {
-      font-size: 64px;
-      color: #e6a23c;
-      margin-bottom: 20px;
+    .failure-icon {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 25px;
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      i {
+        font-size: 50px;
+        color: #f59e0b;
+      }
     }
 
     h3 {
-      font-size: 22px;
-      color: var(--text-main);
+      font-size: 24px;
+      color: #1e293b;
       margin-bottom: 15px;
+      font-weight: 700;
     }
 
     .failure-desc {
       font-size: 15px;
-      color: var(--text-light);
-      margin-bottom: 30px;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
+      color: #64748b;
+      margin-bottom: 35px;
+      line-height: 1.8;
     }
 
     .failure-actions {
       display: flex;
       justify-content: center;
-      gap: 20px;
-    }
-  }
-}
+      gap: 15px;
 
-.faq-section {
-  padding: 60px 0;
-  background: var(--bg-light);
-
-  .section-title {
-    font-size: 28px;
-    text-align: center;
-    margin-bottom: 40px;
-    color: var(--primary-blue);
-  }
-
-  .faq-list {
-    max-width: 800px;
-    margin: 0 auto;
-    background: #fff;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-card);
-
-    :deep(.el-collapse-item__header) {
-      font-size: 16px;
-      font-weight: 500;
-      padding-left: 25px;
-    }
-
-    :deep(.el-collapse-item__content) {
-      padding: 15px 25px 25px;
-      font-size: 15px;
-      color: var(--text-light);
-      line-height: 1.8;
-    }
-  }
-}
-
-.authority-section {
-  padding: 50px 0;
-
-  .authority-card {
-    max-width: 700px;
-    margin: 0 auto;
-    background: linear-gradient(135deg, rgba(10,46,109,0.05) 0%, rgba(74,144,226,0.05) 100%);
-    border-radius: var(--border-radius);
-    padding: 40px;
-    text-align: center;
-    border: 2px solid var(--secondary-blue);
-
-    i {
-      font-size: 48px;
-      color: var(--primary-blue);
-      margin-bottom: 20px;
-    }
-
-    h3 {
-      font-size: 22px;
-      color: var(--text-main);
-      margin-bottom: 15px;
-    }
-
-    p {
-      font-size: 15px;
-      color: var(--text-light);
-      line-height: 1.8;
-      margin-bottom: 25px;
-    }
-
-    .authority-links {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-
-      a {
-        color: var(--secondary-blue);
-        font-size: 14px;
+      .action-btn {
+        min-width: 140px;
+        height: 44px;
+        font-weight: 500;
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 8px;
 
+        &.primary {
+          background: linear-gradient(135deg, #0A2E6D 0%, #2563eb 100%);
+          border: none;
+          color: #fff;
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+          }
+        }
+
         &:hover {
-          color: var(--primary-blue);
-          text-decoration: underline;
+          background: #f1f5f9;
         }
       }
     }
   }
 }
 
+/* Authority Section */
+.authority-section {
+  padding: 50px 0;
+  background: #fff;
+
+  .authority-card {
+    max-width: 800px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+    border: 2px solid #bae6fd;
+
+    .authority-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
+
+      .header-icon {
+        width: 40px;
+        height: 40px;
+        background: #0A2E6D;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        i {
+          color: #fff;
+          font-size: 20px;
+        }
+      }
+
+      h3 {
+        font-size: 20px;
+        color: #0A2E6D;
+        margin: 0;
+        font-weight: 700;
+      }
+    }
+
+    .authority-text {
+      font-size: 15px;
+      color: #475569;
+      line-height: 1.8;
+      margin-bottom: 25px;
+    }
+
+    .authority-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+
+      .link-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #2563eb;
+        font-size: 14px;
+        text-decoration: none;
+        transition: all 0.3s;
+
+        &:hover {
+          color: #0A2E6D;
+          transform: translateY(-2px);
+        }
+
+        i {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}
+
+/* FAQ Section */
+.faq-section {
+  padding: 60px 0 80px;
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 40px;
+
+    .section-title {
+      font-size: 32px;
+      color: #0A2E6D;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .section-subtitle {
+      font-size: 16px;
+      color: #64748b;
+    }
+  }
+
+  .faq-list {
+    max-width: 800px;
+    margin: 0 auto;
+
+    .faq-item {
+      background: #fff;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: all 0.3s;
+
+      &:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      }
+
+      &.active {
+        box-shadow: 0 4px 16px rgba(37, 99, 235, 0.15);
+      }
+
+      .faq-question {
+        padding: 20px 25px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        cursor: pointer;
+        user-select: none;
+
+        .faq-number {
+          width: 30px;
+          height: 30px;
+          background: linear-gradient(135deg, #0A2E6D, #2563eb);
+          color: #fff;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 600;
+          font-size: 14px;
+          flex-shrink: 0;
+        }
+
+        .faq-text {
+          flex: 1;
+          font-size: 16px;
+          font-weight: 600;
+          color: #1e293b;
+        }
+
+        .faq-icon {
+          font-size: 16px;
+          color: #94a3b8;
+          transition: transform 0.3s;
+        }
+      }
+
+      &.active .faq-icon {
+        transform: rotate(90deg);
+      }
+
+      .faq-answer {
+        padding: 0 25px 20px 70px;
+        
+        p {
+          margin: 0;
+          font-size: 15px;
+          color: #64748b;
+          line-height: 1.8;
+        }
+      }
+    }
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
 @media (max-width: 768px) {
+  .page-banner {
+    min-height: 300px;
+    
+    h1 {
+      font-size: 28px;
+    }
+    
+    .banner-desc {
+      font-size: 15px;
+    }
+    
+    .banner-features {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+
   .query-card {
     padding: 30px 20px;
   }
 
+  .cert-info-grid {
+    grid-template-columns: 1fr !important;
+  }
+
   .result-success {
-    .result-content {
-      grid-template-columns: 1fr;
+    .result-header {
+      flex-direction: column;
+      gap: 20px;
+      text-align: center;
     }
 
-    .cert-preview {
-      max-width: 300px;
-      margin: 0 auto;
+    .result-footer {
+      flex-direction: column;
+      
+      .action-btn {
+        width: 100%;
+      }
     }
   }
 
-  .result-failure,
-  .result-success {
-    padding: 40px 25px;
+  .result-failure {
+    padding: 40px 20px;
   }
 
   .authority-card {
     padding: 30px 20px;
+    
+    .authority-links {
+      flex-direction: column;
+      gap: 15px;
+    }
+  }
+
+  .faq-list {
+    .faq-item {
+      .faq-question {
+        padding: 15px 20px;
+      }
+      
+      .faq-answer {
+        padding: 0 20px 15px 60px;
+      }
+    }
   }
 }
 </style>

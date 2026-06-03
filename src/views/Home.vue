@@ -1,13 +1,24 @@
 <template>
   <div class="home-page">
     <!-- Hero Section -->
-    <section class="hero-section">
-      <div class="hero-bg">
+     <section class="hero-section">
+      
+      <!-- 修改开始：使用 el-carousel 作为背景 -->
+      <div class="hero-banner-container">
+        <el-carousel style="height: 600px;" indicator-position="none" :interval="5000" arrow="always">
+          <el-carousel-item v-for="(item, index) in bannerList" :key="index">
+            <!-- 这里可以使用 img 标签或者 background-image -->
+            <div class="banner-slide" :style="{ backgroundImage: `url(${item.image})` }"></div>
+          </el-carousel-item>
+        </el-carousel>
+        <!-- 遮罩层保持在轮播图之上 -->
         <div class="hero-overlay"></div>
       </div>
+      <!-- 修改结束 -->
+
       <div class="container hero-content">
         <div class="hero-text">
-          <h1 class="hero-title">权威认证 · 赋能企业高质量发展 </h1>
+          <h1 class="hero-title">权威认证 · 赋能企业高质量发展</h1>
           <p class="hero-subtitle">一站式管理体系认证解决方案提供商</p>
           <div class="hero-buttons">
             <el-button type="primary" size="large" @click="$router.push('/service')">
@@ -19,7 +30,8 @@
           </div>
         </div>
         <div class="hero-image">
-          <!-- <img src="@/assets/hero-certification.svg" alt="认证服务" /> -->
+          <!-- 如果有右侧插图可以保留，否则可隐藏 -->
+           <!-- <img src="@/assets/hero-certification.svg" alt="认证服务" /> -->
         </div>
       </div>
     </section>
@@ -119,6 +131,11 @@ export default {
   name: 'Home',
   data() {
     return {
+      bannerList: [
+        { image: require('@/assets/banner1.jpg') }, // 请确保 assets 下有对应图片
+        { image: require('@/assets/banner2.jpg') },
+        { image: require('@/assets/banner3.jpg') }
+      ],
       advantages: [
         { icon: 'el-icon-certificate', title: 'CNAS认可资质', desc: '国家认可委权威认可，证书全国通用' },
         { icon: 'el-icon-trophy', title: '一手发证源头', desc: '直接发证，无中间环节，效率更高' },
@@ -205,6 +222,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.el-button--primary{
+  background-color: #409EFF!important;
+  border-color: #409EFF!important;
+}
 .home-page {
   overflow-x: hidden;
 }
@@ -212,39 +233,60 @@ export default {
 /* Hero Section */
 .hero-section {
   position: relative;
-  min-height: 600px;
+  min-height: 600px; /* 或者设定固定高度如 600px */
+  height: 600px;     /* 建议固定高度以便 el-carousel 计算 */
   display: flex;
   align-items: center;
-  background: linear-gradient(135deg, #0A2E6D 0%, #1a4a8d 100%);
   color: #fff;
   overflow: hidden;
 
-  .hero-bg {
+  /* 新增：轮播容器样式 */
+  .hero-banner-container {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('@/assets/hero-bg.jpg') center/cover;
-    opacity: 0.2;
+    z-index: 0;
+
+    /* 覆盖 element-ui 默认样式，确保无缝填充 */
+    ::v-deep .el-carousel__container {
+      height: 100% !important;
+    }
+    
+    ::v-deep .el-carousel__item {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .banner-slide {
+      width: 100%;
+      height: 600px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
   }
 
+  /* 遮罩层：确保在轮播图之上，内容之下 */
   .hero-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(10, 46, 109, 0.85);
+    background: rgba(10, 46, 109, 0.75); /* 稍微调低透明度，让背景图透出来一点 */
+    z-index: 2;
   }
 
   .hero-content {
     position: relative;
-    z-index: 1;
+    z-index: 2; /* 确保内容在最上层 */
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 60px;
     align-items: center;
+    width: 100%; /* 确保 container 宽度正确 */
   }
 
   .hero-title {

@@ -1,10 +1,28 @@
 :root {
   --primary-blue: #0A2E6D;
-  --secondary-blue: #4A90E2;
+  --secondary-blue: #4283cd;
   --accent-gold: #D4AF37;
   --text-main: #333333;
   --text-light: #666666;
   --bg-light: #F8F9FA;
   --border-radius: 8px;
   --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.el-button--primary{
+  border-radius: var(--border-radius);
+  background-color: var(--primary-blue);
+  border-color: var(--primary-blue);
+}
+
+.el-button--text{
+  color: var(--secondary-blue);
+}
+.el-button.is-plain:focus, .el-button.is-plain:hover {
+  color: var(--secondary-blue);
+  border-color: var(--secondary-blue);
+}
+
+.el-tabs__item:hover, .el-tabs__item.is-active, .el-tabs__active-bar {
+  color: var(--secondary-blue);
 }

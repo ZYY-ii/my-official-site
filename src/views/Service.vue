@@ -84,9 +84,9 @@
                       <h4>{{ step.title }}</h4>
                       <p>{{ step.desc }}</p>
                     </div>
-                    <div v-if="index < currentService.process.length - 1" class="step-arrow">
+                    <!-- <div v-if="index < currentService.process.length - 1" class="step-arrow">
                       <i class="el-icon-arrow-right"></i>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </div>
@@ -434,15 +434,19 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.el-button--primary{
+  border-radius: var(--border-radius)!important;
+  background-color: var(--primary-blue)!important;
+  border-color: var(--primary-blue)!important;
+}
 .page-banner {
   position: relative;
-  height: 350px;
+  height: 600px;
   display: flex;
   align-items: center;
-  justify-content: center;
   background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+  background: var(--primary-blue);
   color: #fff;
-  text-align: center;
 
   .banner-bg {
     position: absolute;
@@ -696,7 +700,7 @@ export default {
 
         .step-arrow {
           position: absolute;
-          right: -10px;
+          right: 10px;
           top: 50%;
           transform: translateY(-50%);
           color: var(--secondary-blue);

@@ -58,14 +58,13 @@
               <h3>{{ news.title }}</h3>
               <p class="news-meta">
                 <i class="el-icon-date"></i> {{ news.publishTime }}
-                <i class="el-icon-view"></i> {{ news.viewCount }}
               </p>
               <p class="news-summary">{{ news.summary }}</p>
-              <div class="news-footer">
-                <span class="author">作者：{{ news.author }}</span>
-                <el-button type="text" class="read-more">
-                  阅读全文 <i class="el-icon-arrow-right"></i>
-                </el-button>
+              <div class="read-more-wrapper">
+                <span class="read-more-link" @click.stop="goToDetail(news)">
+                  <span class="link-text">阅读全文</span>
+                  <i class="el-icon-arrow-right link-arrow"></i>
+                </span>
               </div>
             </div>
           </div>
@@ -115,8 +114,6 @@ export default {
           categoryName: '政策法规',
           publishTime: '2025-10-24',
           summary: '质量管理体系认证规则更新，新增对气候变化考虑的要求，企业需关注新标准变化...',
-          author: '管理员',
-          viewCount: 1256,
           cover: ''
         },
         {
@@ -126,8 +123,6 @@ export default {
           categoryName: '行业动态',
           publishTime: '2025-02-25',
           summary: '国际认可论坛和ISO组织联合发布关于气候变化考虑的通知，各认证机构需及时调整...',
-          author: '技术部',
-          viewCount: 892,
           cover: ''
         },
         {
@@ -137,8 +132,6 @@ export default {
           categoryName: '公司新闻',
           publishTime: '2025-01-15',
           summary: '我司2025年度客户满意度达到98.5%，连续三年保持行业领先水平...',
-          author: '市场部',
-          viewCount: 654,
           cover: ''
         },
         {
@@ -148,8 +141,6 @@ export default {
           categoryName: '通知公告',
           publishTime: '2026-01-20',
           summary: '根据国家法定节假日安排，结合我司实际情况，现将2026年春节放假安排通知如下...',
-          author: '行政部',
-          viewCount: 423,
           cover: ''
         },
         {
@@ -159,8 +150,6 @@ export default {
           categoryName: '公司新闻',
           publishTime: '2025-12-10',
           summary: '我司组织的ISO 9001:2025标准解读培训圆满结束，共有150家企业参加...',
-          author: '培训部',
-          viewCount: 789,
           cover: ''
         },
         {
@@ -170,8 +159,6 @@ export default {
           categoryName: '政策法规',
           publishTime: '2025-11-05',
           summary: '市场监管总局就认证认可条例修订草案公开征求意见，截止日期为2025年12月5日...',
-          author: '法规部',
-          viewCount: 1023,
           cover: ''
         }
       ]
@@ -238,7 +225,7 @@ export default {
 <style scoped lang="scss">
 .page-banner {
   position: relative;
-  height: 300px;
+  height: 600px;
   display: flex;
   align-items: center;
   background: var(--primary-blue);
@@ -251,7 +238,7 @@ export default {
     width: 100%;
     height: 100%;
     background: url('@/assets/news-banner.jpg') center/cover;
-    opacity: 0.3;
+    opacity: 0.2;
   }
 
   .container {
@@ -411,16 +398,16 @@ export default {
     }
 
     .news-content {
-      padding: 30px;
+      padding: 24px 28px 20px; // 减小整体 padding
       flex: 1;
       display: flex;
       flex-direction: column;
 
       h3 {
-        font-size: 20px;
-        margin-bottom: 15px;
+        font-size: 19px;
+        margin-bottom: 12px;
         color: var(--text-main);
-        line-height: 1.4;
+        line-height: 1.5;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
@@ -430,22 +417,16 @@ export default {
       .news-meta {
         font-size: 13px;
         color: var(--text-light);
-        margin-bottom: 15px;
+        margin-bottom: 12px;
 
-        i {
-          margin-right: 5px;
-        }
-
-        i + i {
-          margin-left: 20px;
-        }
+        i { margin-right: 5px; }
       }
 
       .news-summary {
         font-size: 14px;
         color: var(--text-light);
         line-height: 1.8;
-        margin-bottom: 20px;
+        margin-bottom: 16px;
         flex: 1;
         display: -webkit-box;
         -webkit-line-clamp: 3;
@@ -453,24 +434,51 @@ export default {
         overflow: hidden;
       }
 
-      .news-footer {
+      // ✨ 新的"阅读全文"设计
+      .read-more-wrapper {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        padding-top: 20px;
-        border-top: 1px solid #f0f0f0;
+        justify-content: flex-end;
 
-        .author {
+        .read-more-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          cursor: pointer;
           font-size: 13px;
-          color: var(--text-light);
-        }
-
-        .read-more {
           color: var(--secondary-blue);
           font-weight: 500;
+          padding: 6px 14px;
+          border-radius: 20px;
+          background: linear-gradient(135deg, rgba(64, 158, 255, 0.08), rgba(64, 158, 255, 0.02));
+          border: 1px solid rgba(64, 158, 255, 0.2);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          overflow: hidden;
 
+          // 悬浮动效
           &:hover {
+            background: linear-gradient(135deg, rgba(64, 158, 255, 0.15), rgba(64, 158, 255, 0.05));
+            border-color: var(--secondary-blue);
             color: var(--primary-blue);
+            padding-left: 18px;
+            padding-right: 18px;
+            box-shadow: 0 4px 12px rgba(64, 158, 255, 0.15);
+            transform: translateX(2px);
+          }
+
+          .link-text {
+            position: relative;
+            z-index: 1;
+          }
+
+          .link-arrow {
+            font-size: 12px;
+            transition: transform 0.3s;
+          }
+
+          &:hover .link-arrow {
+            transform: translateX(3px);
           }
         }
       }
@@ -502,6 +510,50 @@ export default {
     .el-input {
       width: 100%;
     }
+  }
+}
+
+.read-more-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 4px 0;
+  position: relative;
+
+  .link-text {
+    font-size: 14px;
+    font-weight: 600;
+    background: linear-gradient(90deg, var(--primary-blue), #4facfe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .link-arrow {
+    font-size: 12px;
+    color: var(--primary-blue);
+    transition: transform 0.3s;
+  }
+
+  // 底部动态下划线
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-blue), #4facfe);
+    transition: width 0.3s;
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
+
+  &:hover .link-arrow {
+    transform: translateX(4px);
   }
 }
 </style>

@@ -37,7 +37,6 @@
             </el-select>
             <el-select v-model="sortBy" placeholder="排序方式" size="small">
               <el-option label="最新上传" value="newest" />
-              <el-option label="最多下载" value="popular" />
               <el-option label="名称A-Z" value="name" />
             </el-select>
           </div>
@@ -97,7 +96,6 @@
                   </div>
                   <div class="file-desc">{{ file.desc }}</div>
                   <div class="file-stats">
-                    <span><i class="el-icon-download"></i> {{ file.downloadCount }} 次下载</span>
                     <el-tag v-if="file.isNew" size="mini" type="success" effect="dark">NEW</el-tag>
                     <el-tag v-if="file.isHot" size="mini" type="warning" effect="dark">HOT</el-tag>
                   </div>
@@ -232,7 +230,6 @@ export default {
           updateTime: '2025-08-06',
           category: 'guide',
           desc: '用于申请各类管理体系认证的标准化表格',
-          downloadCount: 1256,
           previewUrl: '#',
           isNew: true,
           isHot: false
@@ -245,7 +242,6 @@ export default {
           updateTime: '2025-06-15',
           category: 'guide',
           desc: '认证服务标准合同模板，含双方权利义务条款',
-          downloadCount: 892,
           previewUrl: '/preview/contract.pdf',
           isNew: false,
           isHot: true
@@ -258,7 +254,6 @@ export default {
           updateTime: '2025-10-24',
           category: 'iso9001',
           desc: '最新版质量管理体系认证实施规则',
-          downloadCount: 2341,
           previewUrl: '/preview/iso9001-rule.pdf',
           isNew: true,
           isHot: true
@@ -271,7 +266,6 @@ export default {
           updateTime: '2025-01-10',
           category: 'fee',
           desc: '各类认证服务的详细收费标准及说明',
-          downloadCount: 654,
           previewUrl: '#',
           isNew: false,
           isHot: false
@@ -284,7 +278,6 @@ export default {
           updateTime: '2025-03-20',
           category: 'ccc',
           desc: '强制性产品认证目录及适用范围说明',
-          downloadCount: 1876,
           previewUrl: '/preview/ccc-catalog.pdf',
           isNew: false,
           isHot: true
@@ -297,7 +290,6 @@ export default {
           updateTime: '2025-05-12',
           category: 'iso14001',
           desc: 'ISO 14001认证中环境因素识别的操作指南',
-          downloadCount: 432,
           previewUrl: '#',
           isNew: false,
           isHot: false
@@ -348,9 +340,7 @@ export default {
       // 排序
       if (this.sortBy === 'newest') {
         result.sort((a, b) => new Date(b.updateTime) - new Date(a.updateTime))
-      } else if (this.sortBy === 'popular') {
-        result.sort((a, b) => b.downloadCount - a.downloadCount)
-      } else if (this.sortBy === 'name') {
+      }  else if (this.sortBy === 'name') {
         result.sort((a, b) => a.name.localeCompare(b.name))
       }
       
@@ -427,12 +417,11 @@ export default {
 <style scoped lang="scss">
 .page-banner {
   position: relative;
-  height: 300px;
+  height: 600px;
   display: flex;
   align-items: center;
   background: var(--primary-blue);
   color: #fff;
-  text-align: center;
 
   .banner-bg {
     position: absolute;
@@ -441,7 +430,7 @@ export default {
     width: 100%;
     height: 100%;
     background: url('@/assets/docs-banner.jpg') center/cover;
-    opacity: 0.3;
+    opacity: 0.2;
   }
 
   .container {

@@ -3,7 +3,7 @@
     <div class="container header-inner">
       <!-- Logo -->
       <router-link to="/" class="logo">
-        <img src="@/assets/logo.png" alt="中标信认证" class="logo-img" />
+        <img src="@/assets/cert-sample.jpg" alt="中标信认证" class="logo-img" />
         <span class="logo-text">中标信认证</span>
       </router-link>
 
@@ -55,7 +55,7 @@ export default {
       isScrolled: false,
       mobileMenuOpen: false,
       menuItems: [
-        { path: '/', name: '网站首页' },
+        { path: '/', name: '首页' },
         { path: '/about', name: '关于我们' },
         { path: '/news', name: '新闻动态' },
         { path: '/service', name: '认证服务' },
@@ -89,14 +89,14 @@ export default {
   top: 0;
   left: 0;
   width: 100%;
-  height: 70px;
+  height: 100px;
   background: #fff;
   z-index: 1000;
   transition: all 0.3s ease;
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 
   &.scrolled {
-    height: 60px;
+    height: 90px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   }
 }
@@ -113,11 +113,11 @@ export default {
   align-items: center;
   gap: 10px;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 28px;
   color: var(--primary-blue);
 
   .logo-img {
-    height: 36px;
+    height: 60px;
     width: auto;
   }
 }
@@ -127,7 +127,7 @@ export default {
   gap: 32px;
 
   .nav-item {
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 500;
     color: var(--text-main);
     padding: 8px 0;

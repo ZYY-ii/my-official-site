@@ -190,12 +190,28 @@ export default {
   data() {
     return {
       benefits: [
-        { icon: 'el-icon-wallet', title: '五险一金', desc: '全额缴纳养老、医疗、失业、工伤、生育保险及住房公积金' },
-        { icon: 'el-icon-sunny', title: '带薪年假', desc: '法定年假+公司福利假，工作满1年享5-15天带薪年假' },
-        { icon: 'el-icon-reading', title: '专业培训', desc: '入职培训+技能提升+外部进修，助力职业成长' },
-        { icon: 'el-icon-trend', title: '晋升透明', desc: '双通道晋升机制，管理/专业序列并行，凭能力说话' }
+        { 
+          icon: 'el-icon-wallet', 
+          title: '法定五险', 
+          desc: '依法缴纳养老、医疗、失业、工伤、生育保险' 
+        },
+        { 
+          icon: 'el-icon-sunny', 
+          title: '法定休假', 
+          desc: '严格执行国家法定节假日及周末休息制度' 
+        },
+        { 
+          icon: 'el-icon-reading', 
+          title: '专业培训', 
+          desc: '入职培训+技能提升+外部进修，助力职业成长' 
+        },
+        { 
+          icon: 'el-icon-trend', 
+          title: '晋升透明', 
+          desc: '双通道晋升机制，管理/专业序列并行，凭能力说话' 
+        }
       ],
-      departments: ['审核部', '市场部', '客服部', '行政部', '技术部'],
+      departments: ['运营部', '技术评定部', '人力资源部', '合规部', '市场部', '绿色低碳部', '财务部'],
       locations: ['江苏淮安', '远程办公', '全国'],
       filterDept: '',
       filterLocation: '',
@@ -203,7 +219,7 @@ export default {
         {
           id: 1,
           title: '高级审核员（质量体系方向）',
-          department: '审核部',
+          department: '绿色低碳部',
           location: '江苏淮安',
           salary: '10k-15k·13薪',
           shortDesc: '负责ISO 9001等管理体系的现场审核工作',
@@ -229,7 +245,7 @@ export default {
         {
           id: 3,
           title: '客服专员',
-          department: '客服部',
+          department: '市场部',
           location: '江苏淮安',
           salary: '5k-7k',
           shortDesc: '负责客户咨询接待、进度跟踪、满意度回访',
@@ -238,19 +254,6 @@ export default {
           weekendOff: true,
           deadline: '2026-07-20',
           requirements: ['普通话标准', '熟练使用办公软件', '服务意识强']
-        },
-        {
-          id: 4,
-          title: '前端开发工程师',
-          department: '技术部',
-          location: '远程办公',
-          salary: '12k-18k·14薪',
-          shortDesc: '负责公司官网、后台管理系统的前端开发',
-          isUrgent: true,
-          acceptFresh: false,
-          weekendOff: true,
-          deadline: '2026-08-31',
-          requirements: ['精通Vue 2/3', '熟悉Element UI', '有项目经验']
         }
       ],
       process: [
@@ -362,14 +365,13 @@ export default {
 <style scoped lang="scss">
 .page-banner {
   position: relative;
-  min-height: 400px;
+  min-height: 600px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #0A2E6D 0%, #1a4a8d 100%);
+  background: var(--primary-blue);
   color: #fff;
-  text-align: center;
   padding: 60px 20px;
 
   .banner-bg {
@@ -379,7 +381,7 @@ export default {
     width: 100%;
     height: 100%;
     background: url('@/assets/careers-banner.jpg') center/cover;
-    opacity: 0.25;
+    opacity: 0.2;
   }
 
   .container {

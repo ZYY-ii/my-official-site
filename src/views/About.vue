@@ -74,13 +74,19 @@
     </section>
 
     <!-- 发展历程 -->
-    <section class="timeline-section">
-      <div class="container">
-        <h2 class="section-title">发展历程</h2>
-        <div class="timeline">
-          <div class="timeline-item" v-for="(item, index) in timeline" :key="index" :class="{ 'reverse': index % 2 !== 0 }">
-            <div class="timeline-content">
-              <div class="timeline-year">{{ item.year }}</div>
+  <section class="timeline-section">
+    <div class="timeline-section-container">
+      <h2 class="section-title">发展历程</h2>
+      <div class="timeline-container">
+        <div class="timeline-line"></div>
+        <div class="timeline-items">
+          <div 
+            v-for="(item, index) in timeline" 
+            :key="index"
+            :class="['timeline-item', index % 2 === 0 ? 'top' : 'bottom']"
+          >
+            <div class="timeline-card">
+              <div class="year">{{ item.year }}</div>
               <h3>{{ item.title }}</h3>
               <p>{{ item.desc }}</p>
             </div>
@@ -88,7 +94,8 @@
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
     <!-- 荣誉资质 -->
     <section class="honors-section">
@@ -166,8 +173,12 @@ export default {
         { year: '2016', title: '获得CNAS认可', desc: '通过国家认可委CNAS认可，获得认证资质' },
         { year: '2018', title: '业务拓展', desc: '服务范围扩展至全国，服务企业突破200家' },
         { year: '2020', title: '数字化转型', desc: '推出在线认证服务平台，实现全流程线上办理' },
+        { year: '2018', title: '业务拓展', desc: '服务范围扩展至全国，服务企业突破200家' },
+        { year: '2020', title: '数字化转型', desc: '推出在线认证服务平台，实现全流程线上办理' },
         { year: '2023', title: '里程碑', desc: '累计服务企业超过500家，客户满意度98%' },
-        { year: '2025', title: '新起点', desc: '启动新一轮战略升级，打造智慧认证生态' }
+        { year: '2024', title: '里程碑', desc: '累计服务企业超过500家，客户满意度98%' },
+        { year: '2025', title: '新起点', desc: '启动新一轮战略升级，打造智慧认证生态' },
+        { year: '2026', title: '新起点', desc: '启动新一轮战略升级，打造智慧认证生态' }
       ],
       honors: [
         { title: 'CNAS认可证书', image: honor1 },
@@ -195,7 +206,7 @@ export default {
 <style scoped lang="scss">
 .page-banner {
   position: relative;
-  height: 300px;
+  height: 600px;
   display: flex;
   align-items: center;
   background: var(--primary-blue);
@@ -208,7 +219,7 @@ export default {
     width: 100%;
     height: 100%;
     background: url('@/assets/about-banner.jpg') center/cover;
-    opacity: 0.3;
+    opacity: 0.2;
   }
 
   .container {
@@ -365,85 +376,154 @@ export default {
     margin-bottom: 60px;
     color: var(--primary-blue);
   }
+}
+.timeline-section-container {
+  position: relative;
+  padding: 0 20px;
+  margin: 0 auto;
+}
 
-  .timeline {
-    position: relative;
-    max-width: 900px;
-    margin: 0 auto;
+.timeline-container {
+  position: relative;
+  // max-width: 1200px;
+  margin: 0 auto;
+}
 
-    &::before {
-      content: '';
+.timeline-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+  border-radius: 2px;
+  z-index: 1;
+}
+
+.timeline-items {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+}
+
+.timeline-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 0 10px;
+
+  &.top {
+    // 上方卡片：卡片在上，圆点在下（时间轴线上）
+    .timeline-card {
+      margin-bottom: 120px; // 卡片底部到时间轴线的距离
+      text-align: center;
+      position: relative;
+
+      // 向下箭头
+      &::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 8px solid transparent;
+        border-top-color: #fff;
+        margin-top: 1px;
+      }
+    }
+
+    .timeline-dot {
+      // 圆点定位在时间轴线上
       position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 4px;
-      height: 100%;
-      background: linear-gradient(to bottom, var(--primary-blue), var(--secondary-blue));
-      border-radius: 2px;
+      top: 50%;
+      transform: translateY(-50%);
+      margin-top: 0;
     }
   }
 
-  .timeline-item {
-    position: relative;
-    margin-bottom: 50px;
-    display: flex;
-    justify-content: flex-end;
-    padding-right: 50%;
+  &.bottom {
+    // 下方卡片：圆点在上（时间轴线上），卡片在下
+    .timeline-dot {
+      // 圆点定位在时间轴线上
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      margin-bottom: 0;
+    }
 
-    &.reverse {
-      justify-content: flex-start;
-      padding-right: 0;
-      padding-left: 50%;
+    .timeline-card {
+      margin-top: 260px; // 时间轴线到卡片顶部的距离
+      text-align: center;
+      position: relative;
 
-      .timeline-content {
-        text-align: right;
+      // 向上箭头
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 8px solid transparent;
+        border-bottom-color: #fff;
+        margin-bottom: 1px;
       }
-
-      .timeline-dot {
-        left: -8px;
-        right: auto;
-      }
     }
   }
+}
 
-  .timeline-content {
-    background: #fff;
-    padding: 25px 30px;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-card);
-    max-width: 400px;
-    position: relative;
+.timeline-card {
+  background: #fff;
+  padding: 20px 15px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-card);
+  width: 160px;
+  transition: all 0.3s;
 
-    .timeline-year {
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--secondary-blue);
-      margin-bottom: 10px;
-    }
-
-    h3 {
-      font-size: 20px;
-      margin-bottom: 10px;
-      color: var(--text-main);
-    }
-
-    p {
-      font-size: 14px;
-      color: var(--text-light);
-      line-height: 1.6;
-    }
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
   }
 
-  .timeline-dot {
-    position: absolute;
-    right: -8px;
-    top: 30px;
-    width: 20px;
-    height: 20px;
-    background: var(--accent-gold);
-    border: 4px solid #fff;
-    border-radius: 50%;
-    box-shadow: 0 0 0 4px var(--primary-blue);
+  .year {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--secondary-blue);
+    margin-bottom: 10px;
+  }
+
+  h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: var(--text-main);
+    font-weight: 600;
+  }
+
+  p {
+    font-size: 12px;
+    color: var(--text-light);
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+.timeline-dot {
+  width: 20px;
+  height: 20px;
+  background: var(--accent-gold);
+  border: 4px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px var(--primary-blue);
+  flex-shrink: 0;
+  transition: all 0.3s;
+  z-index: 10;
+
+  &:hover {
+    transform: translateY(-50%) scale(1.2);
+    box-shadow: 0 0 0 5px var(--secondary-blue);
   }
 }
 

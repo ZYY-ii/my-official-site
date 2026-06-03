@@ -269,14 +269,13 @@ export default {
 <style scoped lang="scss">
 .page-banner {
   position: relative;
-  height: 280px;
+  height: 600px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   background: var(--primary-blue);
   color: #fff;
-  text-align: center;
 
   .banner-bg {
     position: absolute;
@@ -285,7 +284,7 @@ export default {
     width: 100%;
     height: 100%;
     background: url('@/assets/contact-banner.jpg') center/cover;
-    opacity: 0.3;
+    opacity: 0.2;
   }
 
   .container {
@@ -294,7 +293,7 @@ export default {
   }
 
   h1 {
-    font-size: 42px;
+    font-size: 48px;
     margin-bottom: 12px;
   }
 
