@@ -156,14 +156,14 @@
 <script>
 // 1. 在顶部引入图片
 import honor1 from '@/assets/honor1.png'
-import honor2 from '@/assets/honor2.png'
-import honor3 from '@/assets/honor3.png'
-import honor4 from '@/assets/honor4.png'
+import honor2 from '@/assets/honor1.png'
+import honor3 from '@/assets/honor1.png'
+import honor4 from '@/assets/honor1.png'
 
 import team1 from '@/assets/team1.jpg'
-import team2 from '@/assets/team2.jpg'
-import team3 from '@/assets/team3.jpg'
-import team4 from '@/assets/team4.jpg'
+import team2 from '@/assets/team1.jpg'
+import team3 from '@/assets/team1.jpg'
+import team4 from '@/assets/team1.jpg'
 export default {
   name: 'About',
   data() {

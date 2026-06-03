@@ -6,7 +6,8 @@ module.exports = defineConfig({
   
   // 🔑 核心：使用环境变量动态设置 publicPath
   publicPath: process.env.VUE_APP_BASE_URL || 
-    (process.env.NODE_ENV === 'production' ? '/my-official-site/' : '/'),
+    // (process.env.NODE_ENV === 'production' ? '/my-official-site/' : '/'),
+    (process.env.NODE_ENV === 'production' ? './' : '/'),
   
   outputDir: 'dist',
   
